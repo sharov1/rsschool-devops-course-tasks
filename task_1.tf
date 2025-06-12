@@ -12,3 +12,13 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
+
+
+resource "aws_s3_bucket_1337" {
+  bucket = "my-tf-test-bucket_1337"
+
+  tags = {
+    Name        = "My bucket 1337"
+    
+  }
+}
