@@ -4,9 +4,9 @@ env:
 
 on:
   push:
-    branches: main
+    branches: task_1
   pull_request:
-    branches: main
+    branches: task_1
 
 jobs:
   terraform-check:
