@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 
-resource "aws_s3_bucket_1337" {
+resource "aws_s3_bucket" "bucket_1337" {
   bucket = "my-tf-test-bucket_1337"
 
   tags = {
