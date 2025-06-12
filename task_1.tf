@@ -14,3 +14,10 @@ provider "aws" {
 }
 
 
+terraform {
+   backend "s3" {
+      bucket = "course-bucket1337"
+      key    = "tf-state"
+      region = "us-east-1"
+  }
+}
