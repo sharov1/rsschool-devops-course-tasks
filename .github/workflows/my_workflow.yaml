@@ -1,0 +1,56 @@
+name: My_tf_ci
+env:
+  AWS_REGION_NAME : "us-east-1"
+
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+jobs:
+  terraform-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+      - run: terraform fmt -check
+
+  terraform-plan:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::647187952247:role/GithubActionsRole
+          aws-region: us-east-1
+      - run: terraform init
+      - run: terraform plan
+
+  terraform-apply:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::647187952247:role/GithubActionsRole
+          aws-region: us-east-1
+      - run: terraform init
+      - run: terraform apply -auto-approve
